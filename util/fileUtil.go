@@ -2,7 +2,6 @@ package util
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"os"
 )
@@ -22,10 +21,9 @@ func ReadFileLine(filePath string, callback ReadCallback) {
 	for {
 		a, _, c := br.ReadLine()
 		if c == io.EOF {
-			callback(nil, "")
+			callback(io.EOF, "")
 			break
 		}
-		fmt.Println(string(a))
-		callback(nil, "")
+		callback(nil, string(a))
 	}
 }
