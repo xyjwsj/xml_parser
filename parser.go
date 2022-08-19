@@ -8,7 +8,7 @@ import (
 
 var (
 	endSymbol = [...]string{"/>", "</"}
-	tagSymbol = [...]string{"<", ">", "/>", "</"}
+	tagSymbol = [...]string{"/>", "</", "<", ">"}
 )
 
 func ParseXml(xmlPath string) Tag {
@@ -24,12 +24,16 @@ func ParseXml(xmlPath string) Tag {
 		if err == io.EOF || line == "" {
 			return
 		}
-		filter := headerFilter(line)
-		descriptor := parseLine(strings.TrimSpace(filter))
+		filter := strings.TrimSpace(headerFilter(line))
+		if filter == "" {
+			return
+		}
+		descriptor := parseLine(filter)
 		if descriptor.Pop {
 			operateTag = operateTag.Parent
 			return
 		}
+
 		if descriptor.Start && operateTag.Start {
 			child := &Tag{
 				Start:     true,
@@ -41,6 +45,16 @@ func ParseXml(xmlPath string) Tag {
 			operateTag.ChildTags = append(operateTag.ChildTags, child)
 			operateTag = child
 		}
+
+		if descriptor.NoSymbol {
+			operateTag.Value = descriptor.Text
+			return
+		}
+
+		if descriptor.Text != "" {
+			operateTag.Value = descriptor.Text
+		}
+
 		operateTag.Start = true
 		if descriptor.TagName != "" {
 			operateTag.Name = descriptor.TagName
@@ -50,7 +64,7 @@ func ParseXml(xmlPath string) Tag {
 				operateTag.Attribute = descriptor.Attribute
 			} else {
 				for key, val := range descriptor.Attribute {
-					operateTag.Attribute[key] = val
+					operateTag.Attribute[key] = fixVal(val)
 				}
 			}
 		}
@@ -77,18 +91,30 @@ func headerFilter(content string) string {
 
 func parseLine(line string) LineDescriptor {
 	descriptor := LineDescriptor{
+		NoSymbol:   false,
 		Start:      false,
 		End:        false,
 		Pop:        false,
 		TagName:    "",
 		Attribute:  make(map[string]string, 0),
 		StartChild: false,
+		Text:       "",
 	}
 	for _, item := range endSymbol {
 		if strings.Contains(line, item) {
 			descriptor.End = true
 			break
 		}
+	}
+
+	if !existSymbol(line) {
+		descriptor.NoSymbol = true
+		descriptor.Text = line
+	}
+
+	if val := valueSymbol(line); val != "" {
+		descriptor.Text = val
+		line = strings.ReplaceAll(line, val, "")
 	}
 
 	if strings.HasPrefix(line, "<") {
@@ -112,7 +138,8 @@ func parseLine(line string) LineDescriptor {
 			continue
 		}
 		attr := strings.Split(item, "=")
-		descriptor.Attribute[attr[0]] = attr[1]
+		val := strings.ReplaceAll(attr[1], "/"+descriptor.TagName, "")
+		descriptor.Attribute[attr[0]] = fixVal(val)
 	}
 	return descriptor
 }
@@ -122,4 +149,23 @@ func originContent(line string) string {
 		line = strings.ReplaceAll(line, item, "")
 	}
 	return line
+}
+
+func existSymbol(line string) bool {
+	return strings.Contains(line, "<") ||
+		strings.Contains(line, ">") ||
+		strings.Contains(line, "/>") ||
+		strings.Contains(line, "</")
+}
+
+func valueSymbol(line string) string {
+	match := util.Match(line, ">(.*)<")
+	if len(match) > 1 {
+		return match[1]
+	}
+	return ""
+}
+
+func fixVal(val string) string {
+	return strings.ReplaceAll(val, "\"", "")
 }
