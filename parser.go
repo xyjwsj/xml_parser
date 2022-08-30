@@ -133,6 +133,9 @@ func parseLine(line string) LineDescriptor {
 
 	attrs := strings.Split(content, " ")
 	for _, item := range attrs {
+		if item == "" {
+			continue
+		}
 		if !strings.Contains(item, "=") {
 			descriptor.TagName = item
 			continue
