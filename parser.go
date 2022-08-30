@@ -133,7 +133,7 @@ func parseLine(line string) LineDescriptor {
 
 	attrs := strings.Split(content, " ")
 	for _, item := range attrs {
-		if item == "" {
+		if item == "" { //
 			continue
 		}
 		if !strings.Contains(item, "=") {
