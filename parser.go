@@ -148,9 +148,13 @@ func parseLine(line string) LineDescriptor {
 }
 
 func originContent(line string) string {
-	match := util.Match(line, "<(.*?)[>|\\/>]")
+	match := util.Match(line, "<(.*?)>")
 	if len(match) > 1 {
 		s := match[1]
+		index := strings.LastIndex(s, "/")
+		if index == len(s)-1 {
+			s = s[:len(s)-1]
+		}
 		for _, item := range tagSymbol {
 			s = strings.ReplaceAll(s, item, "")
 		}
