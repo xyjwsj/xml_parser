@@ -114,7 +114,10 @@ func parseLine(line string) LineDescriptor {
 
 	if val := valueSymbol(line); val != "" {
 		descriptor.Text = val
-		line = strings.ReplaceAll(line, val, "")
+		substr := ">" + val
+		index := strings.Index(line, substr)
+		line = line[0:index+1] + line[index+len(substr):]
+		//line = strings.ReplaceAll(line, val, "")
 	}
 
 	if strings.HasPrefix(line, "<") {

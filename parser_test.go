@@ -12,3 +12,7 @@ func TestParseXml(t *testing.T) {
 	//Serializer(xml, true, "/Users/wushaojie/Downloads/test.xml")
 	ParseXml("/Users/wushaojie/Documents/project/golang/package-core/apkBuild/srcSdkApkDir/res/values/strings.xml")
 }
+
+func TestMergeValues(t *testing.T) {
+	ParseXml("/Users/wushaojie/Documents/project/golang/package-core/apkBuild/channelBuildApkDir/res/values/strings.xml")
+}
