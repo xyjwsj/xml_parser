@@ -32,7 +32,6 @@ func Serializer(tag Tag, supportHeader bool, filePath string) {
 		End:     true,
 	}
 	<-stopChan
-	log.Println("end")
 }
 
 func writeSingleDom(tag *Tag, hierarchy int, contentChan chan<- LineContent) {
@@ -101,6 +100,5 @@ func writeFile(filePath string, contentChan <-chan LineContent, stop chan<- int)
 	}
 Loop:
 	w.Flush()
-	log.Println("write File End!!!")
 	stop <- 1
 }
