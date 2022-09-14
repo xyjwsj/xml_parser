@@ -1,8 +1,6 @@
 package xml
 
 import (
-	"os"
-	"path/filepath"
 	"testing"
 )
 
@@ -20,13 +18,6 @@ func TestMergeValues(t *testing.T) {
 }
 
 func TestMergeValueNew(t *testing.T) {
-	_ = filepath.Walk("/Users/wushaojie/Library/Caches/access_package/sdk/expand/4399channelDir/res/values", func(path string, info os.FileInfo, err error) error {
-		fName := info.Name()
-		if fName == "" {
-			return nil
-		}
-		dirFileXml := "/Users/wushaojie/Library/Caches/access_package/sdk/expand/4399channelDir/res/values/" + fName
-		ParseXml(dirFileXml)
-		return nil
-	})
+	dirFileXml := "/Users/wushaojie/Library/Caches/access_package/sdk/expand/hoolaichannelDir/res/values/strings.xml"
+	ParseXml(dirFileXml)
 }

@@ -3,7 +3,6 @@ package xml
 import (
 	"github.com/xyjwsj/xml_parser/util"
 	"io"
-	"log"
 	"strings"
 )
 
@@ -31,17 +30,19 @@ func ParseXml(xmlPath string) Tag {
 		if filter == "" {
 			return
 		}
-		if strings.Contains(filter, "m4399_pay_history_time_fmt_after_today") {
-			log.Println(filter)
-		}
 		if !strings.HasSuffix(filter, ">") {
-			mergeVal = true
-			tmpVal = filter
+			if mergeVal {
+				tmpVal += " " + filter
+			} else {
+				mergeVal = true
+				tmpVal = filter
+			}
 			return
 		}
 		if mergeVal {
-			filter = tmpVal + filter
+			filter = tmpVal + " " + filter
 			tmpVal = ""
+			mergeVal = false
 		}
 		descriptor := parseLine(filter)
 		if descriptor.Pop {
