@@ -1,6 +1,8 @@
 package xml
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -15,4 +17,16 @@ func TestParseXml(t *testing.T) {
 
 func TestMergeValues(t *testing.T) {
 	ParseXml("/Users/wushaojie/Documents/project/golang/package-core/apkBuild/channelBuildApkDir/res/values/strings.xml")
+}
+
+func TestMergeValueNew(t *testing.T) {
+	_ = filepath.Walk("/Users/wushaojie/Library/Caches/access_package/sdk/expand/4399channelDir/res/values", func(path string, info os.FileInfo, err error) error {
+		fName := info.Name()
+		if fName == "" {
+			return nil
+		}
+		dirFileXml := "/Users/wushaojie/Library/Caches/access_package/sdk/expand/4399channelDir/res/values/" + fName
+		ParseXml(dirFileXml)
+		return nil
+	})
 }

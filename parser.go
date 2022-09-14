@@ -20,6 +20,8 @@ func ParseXml(xmlPath string) Tag {
 		Parent:    nil,
 	}
 	operateTag := &tag
+	tmpVal := ""
+	mergeVal := false
 	util.ReadFileLine(xmlPath, func(err error, line string) {
 		if err == io.EOF || line == "" {
 			return
@@ -27,6 +29,15 @@ func ParseXml(xmlPath string) Tag {
 		filter := strings.TrimSpace(headerFilter(line))
 		if filter == "" {
 			return
+		}
+		if !strings.HasSuffix(filter, ">") {
+			mergeVal = true
+			tmpVal = filter
+			return
+		}
+		if mergeVal {
+			filter = tmpVal + filter
+			tmpVal = ""
 		}
 		descriptor := parseLine(filter)
 		if descriptor.Pop {
