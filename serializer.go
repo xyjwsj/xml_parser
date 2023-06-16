@@ -10,10 +10,10 @@ import (
 type HeaderType int
 
 const (
-	no = iota
-	xmlHeaderType
-	standaloneYesXmlHeaderType
-	standaloneNoXmlHeaderType
+	No = iota
+	XmlHeaderType
+	StandaloneYesXmlHeaderType
+	StandaloneNoXmlHeaderType
 )
 const (
 	standaloneNoXmlHeader  = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?>"
@@ -22,9 +22,9 @@ const (
 )
 
 var headerTypeContent = map[HeaderType]string{
-	xmlHeaderType:              xmlHeader,
-	standaloneYesXmlHeaderType: standaloneYesXmlHeader,
-	standaloneNoXmlHeaderType:  standaloneNoXmlHeader,
+	XmlHeaderType:              xmlHeader,
+	StandaloneYesXmlHeaderType: standaloneYesXmlHeader,
+	StandaloneNoXmlHeaderType:  standaloneNoXmlHeader,
 }
 
 type LineContent struct {
@@ -36,7 +36,7 @@ func Serializer(tag Tag, headerType HeaderType, filePath string) {
 	contentChan := make(chan LineContent, 1000)
 	stopChan := make(chan int, 2)
 	go writeFile(filePath, contentChan, stopChan)
-	if headerType > no {
+	if headerType > No {
 		contentChan <- LineContent{
 			Content: headerTypeContent[headerType],
 			End:     false,
