@@ -1,6 +1,7 @@
 package xml
 
 import (
+	"log"
 	"testing"
 )
 
@@ -10,7 +11,9 @@ func TestParseXml(t *testing.T) {
 	//json := util.Struct2EscapeJson(xml, true)
 	//log.Println(json)
 	//Serializer(xml, true, "/Users/wushaojie/Downloads/test.xml")
-	ParseXml("/Users/wushaojie/Documents/project/golang/package-core/apkBuild/srcSdkApkDir/res/values/strings.xml")
+	xml := ParseXml("/Users/wushaojie/Downloads/strings.xml")
+	log.Println(xml)
+	Serializer(xml, xmlHeaderType, "/Users/wushaojie/Downloads/strings1.xml")
 }
 
 func TestMergeValues(t *testing.T) {
