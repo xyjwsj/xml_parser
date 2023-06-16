@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
 type HeaderType int
@@ -101,16 +102,17 @@ func writeFile(filePath string, contentChan <-chan LineContent, stop chan<- int)
 		os.Exit(1)
 	}
 	defer f.Close()
-
-	w := bufio.NewWriter(f)
-
+	w := bufio.NewWriterSize(f, 10240)
 	for {
 		select {
 		case content := <-contentChan:
 			if content.End {
 				goto Loop
 			}
-			fmt.Fprintln(w, content.Content)
+
+			fmt.Fprintln(w, strings.ReplaceAll(content.Content, "\\r\\n", "\r\n"))
+			//w.Write([]byte(content.Content + "\n"))
+
 		default:
 		}
 	}

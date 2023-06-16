@@ -32,7 +32,7 @@ func ParseXml(xmlPath string) Tag {
 		}
 		if !strings.HasSuffix(filter, ">") {
 			if mergeVal {
-				tmpVal += " " + filter
+				tmpVal += "\\r\\n" + filter //换行符号需要在序列化时候替换回去
 			} else {
 				mergeVal = true
 				tmpVal = filter

@@ -11,9 +11,9 @@ func TestParseXml(t *testing.T) {
 	//json := util.Struct2EscapeJson(xml, true)
 	//log.Println(json)
 	//Serializer(xml, true, "/Users/wushaojie/Downloads/test.xml")
-	xml := ParseXml("/Users/wushaojie/Downloads/strings.xml")
+	xml := ParseXml("/Users/wushaojie/Downloads/aaa1.xml")
 	log.Println(xml)
-	Serializer(xml, xmlHeaderType, "/Users/wushaojie/Downloads/strings1.xml")
+	Serializer(xml, XmlHeaderType, "/Users/wushaojie/Downloads/aaa2.xml")
 }
 
 func TestMergeValues(t *testing.T) {
